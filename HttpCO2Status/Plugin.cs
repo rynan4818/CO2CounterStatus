@@ -1,4 +1,6 @@
-﻿using IPA;
+﻿using HttpCO2Status.Installers;
+using IPA;
+using SiraUtil.Zenject;
 using IPALogger = IPA.Logging.Logger;
 
 namespace HttpCO2Status
@@ -7,16 +9,15 @@ namespace HttpCO2Status
     public class Plugin
     {
         internal static Plugin Instance { get; private set; }
-        /// <summary>
-        /// Use to send log messages through BSIPA.
-        /// </summary>
         internal static IPALogger Log { get; private set; }
 
         [Init]
-        public Plugin(IPALogger logger)
+        public Plugin(IPALogger logger, Zenjector zenjector)
         {
             Instance = this;
             Log = logger;
+            Log.Info("HttpCO2Status initialized.");
+            zenjector.Install<HCSAppInstaller>(Location.App);
         }
 
         [OnStart]
