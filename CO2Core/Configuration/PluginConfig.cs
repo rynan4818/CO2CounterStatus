@@ -12,7 +12,6 @@ namespace CO2Core.Configuration
         public static PluginConfig Instance { get; set; }
         public virtual bool Enable { get; set; } = true;
         public virtual string Port { get; set; } = SerialPortController.GetPort().LastOrDefault() ?? "NONE";
-        public virtual double HumCorrection { get; set; } = 1.3333; // 湿度補正値 :https://twitter.com/sakura_sakusaku/status/1625133221922103300
         public virtual double TempOffset { get; set; } = -4.5; // 温度オフセット :https://twitter.com/sakura_sakusaku/status/1625133221922103300
 
         /// <summary>
