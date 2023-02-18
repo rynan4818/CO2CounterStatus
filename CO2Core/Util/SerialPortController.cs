@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO.Ports;
 using System.Text;
 
@@ -44,6 +45,7 @@ namespace CO2Core.Util
         }
         public void Send(string text)
         {
+            if (serialPort == null) return;
             if (!serialPort.IsOpen) return;
             try
             {
@@ -56,6 +58,7 @@ namespace CO2Core.Util
         }
         public string ReadData()
         {
+            if (serialPort == null) return "PORT NULL";
             if (!serialPort.IsOpen) return "PORT CLOSE";
             var text = "";
             try

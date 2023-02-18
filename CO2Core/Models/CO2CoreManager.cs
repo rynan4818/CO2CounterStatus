@@ -19,6 +19,8 @@ namespace CO2Core.Models
         public SerialPortController port = new SerialPortController();
         public void Initialize()
         {
+            if (PluginConfig.Instance.Port == "NONE" || !PluginConfig.Instance.Enable)
+                return;
             if (port.PortOpen(PluginConfig.Instance.Port))
                 port.Send("STA");
             else

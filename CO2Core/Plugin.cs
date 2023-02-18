@@ -1,4 +1,5 @@
 ﻿using CO2Core.Installers;
+using CO2Core.Views;
 using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using SiraUtil.Zenject;
 using IPALogger = IPA.Logging.Logger;
+using BeatSaberMarkupLanguage.Settings;
 
 namespace CO2Core
 {

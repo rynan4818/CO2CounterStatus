@@ -1,5 +1,5 @@
 ﻿using Zenject;
-using CO2Core.Models;
+using CO2Core.Views;
 
 namespace CO2Core.Installers
 {
@@ -7,6 +7,7 @@ namespace CO2Core.Installers
     {
         public override void InstallBindings()
         {
+            this.Container.BindInterfacesAndSelfTo<ConfigViewController>().FromNewComponentAsViewController().AsSingle().NonLazy();
         }
     }
 }
