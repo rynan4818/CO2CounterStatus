@@ -1,6 +1,8 @@
-﻿/*
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using IPA.Config.Stores;
+using System.Linq;
+using CO2Core.Util;
+
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
 namespace CO2Core.Configuration
@@ -8,7 +10,9 @@ namespace CO2Core.Configuration
     internal class PluginConfig
     {
         public static PluginConfig Instance { get; set; }
-        public virtual int IntValue { get; set; } = 42; // Must be 'virtual' if you want BSIPA to detect a value change and save the config automatically.
+        public virtual string Port { get; set; } = SerialPortController.GetPort().Last(); // Must be 'virtual' if you want BSIPA to detect a value change and save the config automatically.
+        public virtual double HumCorrection { get; set; } = 1.3333; // 湿度補正値 :https://twitter.com/sakura_sakusaku/status/1625133221922103300
+        public virtual double TempOffset { get; set; } = -4.5; // 温度オフセット :https://twitter.com/sakura_sakusaku/status/1625133221922103300
 
         /// <summary>
         /// This is called whenever BSIPA reads the config from disk (including when file changes are detected).
@@ -35,4 +39,3 @@ namespace CO2Core.Configuration
         }
     }
 }
-*/

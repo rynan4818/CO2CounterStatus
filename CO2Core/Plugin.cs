@@ -1,4 +1,5 @@
-﻿using IPA;
+﻿using CO2Core.Installers;
+using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
+using SiraUtil.Zenject;
 using IPALogger = IPA.Logging.Logger;
 
 namespace CO2Core
@@ -22,7 +24,6 @@ namespace CO2Core
 
         internal static Plugin Instance { get; private set; }
         internal static IPALogger Log { get; private set; }
-        internal static CO2CoreController PluginController { get { return CO2CoreController.Instance; } }
 
         [Init]
         /// <summary>
@@ -30,11 +31,15 @@ namespace CO2Core
         /// [Init] methods that use a Constructor or called before regular methods like InitWithConfig.
         /// Only use [Init] with one Constructor.
         /// </summary>
-        public Plugin(IPALogger logger)
+        public Plugin(IPALogger logger, Config conf, Zenjector zenjector)
         {
             Instance = this;
             Plugin.Log = logger;
             Plugin.Log?.Debug("Logger initialized.");
+            Configuration.PluginConfig.Instance = conf.Generated<Configuration.PluginConfig>();
+            Plugin.Log?.Debug("Config loaded");
+            zenjector.Install<CO2CoreAppInstaller>(Location.App);
+            zenjector.Install<CO2CoreMenuInstaller>(Location.Menu);
         }
 
         #region BSIPA Config
@@ -58,7 +63,6 @@ namespace CO2Core
         [OnEnable]
         public void OnEnable()
         {
-            new GameObject("CO2CoreController").AddComponent<CO2CoreController>();
             //ApplyHarmonyPatches();
         }
 
@@ -70,8 +74,6 @@ namespace CO2Core
         [OnDisable]
         public void OnDisable()
         {
-            if (PluginController != null)
-                GameObject.Destroy(PluginController);
             //RemoveHarmonyPatches();
         }
 
