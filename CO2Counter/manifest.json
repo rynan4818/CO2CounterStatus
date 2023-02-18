@@ -2,11 +2,35 @@
   "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
   "id": "CO2Counter",
   "name": "CO2Counter",
-  "author": "",
+  "author": "Rynan",
   "version": "0.0.1",
-  "description": "",
-  "gameVersion": "1.18.3",
+  "description": "Added CO2 counter",
+  "gameVersion": "1.20.0",
   "dependsOn": {
-    "BSIPA": "^4.2.0"
+    "BSIPA": "^4.2.2",
+    "BeatSaberMarkupLanguage": "^1.6.3",
+    "SiraUtil": "^3.0.5",
+    "Counters+": "^2.2.7",
+    "CO2Core": "^0.0.1"
+  },
+  "loadAfter": [
+    "Counters+"
+  ],
+  "features": {
+    "CountersPlus.CustomCounter": {
+      "Name": "CO2 Counter",
+      "Description": "Shows the CO2 Level",
+      "CounterLocation": "CO2Counter.CO2Counter",
+      "ConfigDefaults": {
+        "Enabled": true,
+        "Position": "BelowCombo",
+        "Distance": 0
+      },
+      "BSML": {
+        "Resource": "CO2Counter.settings.bsml",
+        "Host": "CO2Counter.SettingsHandler",
+        "Icon": "CO2Counter.Images.icon.png"
+      }
+    }
   }
 }
