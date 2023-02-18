@@ -3,13 +3,13 @@
   "id": "HttpCO2Status",
   "name": "HttpCO2Status",
   "author": "Rynan",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0",
+  "description": "Send CO2Core data via HttpSiraStatus",
   "gameVersion": "1.21.0",
   "dependsOn": {
-    "BSIPA": "^4.2.0",
+    "BSIPA": "^4.2.2",
     "SiraUtil": "^3.0.5",
-    "CO2Core": "^0.0.1",
+    "CO2Core": "^1.0.0",
     "HttpSiraStatus": ">=9.0.0"
   }
 }
