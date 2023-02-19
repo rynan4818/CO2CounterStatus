@@ -53,14 +53,11 @@ namespace CO2Core.Models
                            double.TryParse(co2data.Substring(tmpIdx + 4, tmpEnd - tmpIdx - 4), out tmp))
                         {
                             //温度、湿度補正
-                            var tmp1 = 6.1078 * Math.Pow(10.0, 7.5 * tmp / (tmp + 237.3));
-                            tmp += PluginConfig.Instance.TempOffset;
-                            var hum1 = hum * tmp1 / 100.0;
-                            var tmp2 = 6.1078 * Math.Pow(10.0, 7.5 * tmp / (tmp + 237.3));
-                            var hum2 = hum1 / tmp2 * 100.0;
-                            if (hum2 <= 99.9)
-                                hum = hum2;
-                            else
+                            var et0 = 6.1078 * Math.Pow(10.0, 7.5 * tmp / (tmp + 237.3)); //補正前温度の飽和水蒸気圧
+                            tmp += PluginConfig.Instance.TempOffset;                      //温度補正
+                            var et1 = 6.1078 * Math.Pow(10.0, 7.5 * tmp / (tmp + 237.3)); //補正後温度の飽和水蒸気圧
+                            hum *= et0 / et1;                                             //湿度補正
+                            if (hum > 99.9)
                                 hum = 99.9;
                             hum = Math.Round(hum, 1, MidpointRounding.AwayFromZero);
                             HMMainThreadDispatcher.instance?.Enqueue(() =>
