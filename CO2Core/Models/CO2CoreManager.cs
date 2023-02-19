@@ -4,6 +4,8 @@ using System;
 using CO2Core.Util;
 using CO2Core.Configuration;
 using CO2Core.Interfaces;
+using System.IO;
+using System.Diagnostics;
 
 namespace CO2Core.Models
 {
@@ -19,13 +21,14 @@ namespace CO2Core.Models
         public SerialPortController port = new SerialPortController();
         public void Initialize()
         {
-            if (PluginConfig.Instance.Port == "NONE" || !PluginConfig.Instance.Enable)
+            if (!PluginConfig.Instance.Enable)
                 return;
-            if (port.PortOpen(PluginConfig.Instance.Port))
+            if (PluginConfig.Instance.Port != "NONE" && port.PortOpen(PluginConfig.Instance.Port))
                 port.Send("STA");
             else
             {
-                Plugin.Log?.Error("OPEN ERROR");
+                Plugin.Log?.Error("COM PORT OPEN ERROR");
+                CheckStandardApp();
                 return;
             }
             this._thread = new Thread(new ThreadStart(() =>
@@ -66,6 +69,85 @@ namespace CO2Core.Models
                             });
                         }
                     }
+                }
+            }));
+            this._thread.Start();
+        }
+        private void CheckStandardApp()
+        {
+            var ioDataAppPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "I-O_DATA");
+            if (!Directory.Exists(ioDataAppPath))
+                return;
+            this._thread = new Thread(new ThreadStart(() =>
+            {
+                while (!this._disposedValue)
+                {
+                    var files = Directory.EnumerateFiles(ioDataAppPath, "log*.txt", SearchOption.AllDirectories);
+                    var maxTime = DateTime.MinValue;
+                    var maxTimeFile = "";
+                    foreach (string file in files)
+                    {
+                        var filetime = File.GetLastWriteTime(file);
+                        if (maxTime < filetime)
+                        {
+                            maxTime = filetime;
+                            maxTimeFile = file;
+                        }
+                    }
+                    if (!File.Exists(maxTimeFile))
+                        break;
+                    if (DateTime.Now - maxTime <= new TimeSpan(0, 0, 50))
+                    {
+                        String text = "";
+                        try
+                        {
+                            using (var fs = new FileStream(maxTimeFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                            {
+                                using (var sr = new StreamReader(fs))
+                                {
+                                    String line;
+                                    while ((line = sr.ReadLine()) != null)
+                                        text = line;
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Plugin.Log?.Error($"{maxTimeFile}:OpenError:{ex}");
+                        }
+                        try
+                        {
+                            var csv = text.Split(',');
+                            var co2st = csv[2].Substring(csv[2].IndexOf(":") + 1);
+                            var tmpst = csv[3].Substring(csv[3].IndexOf(":") + 1);
+                            var humst = csv[4].Substring(csv[4].IndexOf(":") + 1);
+                            int co2;
+                            double hum;
+                            double tmp;
+                            if (int.TryParse(co2st, out co2) && double.TryParse(tmpst, out hum) && double.TryParse(humst, out tmp))
+                            {
+                                HMMainThreadDispatcher.instance?.Enqueue(() =>
+                                {
+                                    UpdateCO2(co2, hum, tmp);
+                                });
+                            }
+                            else
+                                Plugin.Log?.Error($"{maxTimeFile}:ParseError");
+                        }
+                        catch (Exception ex)
+                        {
+                            Plugin.Log?.Error($"{maxTimeFile}:ParseExceptionError:{ex}");
+                        }
+                    }
+                    var diffTime = (DateTime.Now - maxTime).TotalMilliseconds;
+                    var sleepTime = 60000.0;
+                    if (diffTime < 30000.0)
+                        sleepTime = 30000.0 - diffTime;
+                    else if (diffTime <= 60000.0)
+                        sleepTime = 90000.0 - diffTime;
+                    else
+                        sleepTime = 60000.0;
+                    Thread.Sleep((int)sleepTime);
                 }
             }));
             this._thread.Start();
