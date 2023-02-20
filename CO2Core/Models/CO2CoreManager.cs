@@ -114,6 +114,7 @@ namespace CO2Core.Models
                         }
                         try
                         {
+                            //標準アプリログフォーマット 2023-02-18 00:18:44.006 +09:00 [INF] ,PORT:COM5, CO2:1488, TMP:20.9, HUM:34.8, 
                             var csv = text.Split(',');
                             var co2st = csv[2].Substring(csv[2].IndexOf(":") + 1);
                             var tmpst = csv[3].Substring(csv[3].IndexOf(":") + 1);
@@ -121,7 +122,7 @@ namespace CO2Core.Models
                             int co2;
                             double hum;
                             double tmp;
-                            if (int.TryParse(co2st, out co2) && double.TryParse(tmpst, out hum) && double.TryParse(humst, out tmp))
+                            if (int.TryParse(co2st, out co2) && double.TryParse(tmpst, out tmp) && double.TryParse(humst, out hum))
                             {
                                 HMMainThreadDispatcher.instance?.Enqueue(() =>
                                 {
