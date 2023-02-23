@@ -7,6 +7,8 @@
 
 ![image](https://user-images.githubusercontent.com/14249877/219855758-d576af60-0283-491a-8770-96e413239d37.png)
 
+UD-CO2Sは定価1万円を超えますが、2023年2月現在は在庫処分？でネット通販(アマゾン・ムラウチドットコムだと3000円台で販売されています。使用されているセンサはSCD30で高精度なCO2センサで単体で購入すると[部品代だけで1万円弱](https://www.marutsu.co.jp/pc/i/2190733/)します。
+
 # インストール方法
 1. CountersPlusを使用する場合には[CountersPlus](https://github.com/Caeden117/CountersPlus)をインストールして動作するようにしてください。
 2. オーバーレイを使用する場合には[HttpSiraStatus](https://github.com/denpadokei/HttpSiraStatus)と[Beat Saber Overlay 改良版](https://github.com/rynan4818/beat-saber-overlay)をインストールして動作するようにしてください。本modの表示には`index_HDT_SRMqueue_CO2_sample.html`を使用する必要があります。
