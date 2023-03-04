@@ -31,7 +31,7 @@ namespace CO2Counter
             _counterCO2.lineSpacing = -26;
             _counterCO2.fontSize = PluginConfig.Instance.FigureFontSize;
             _counterCO2.alignment = TextAlignmentOptions.Top;
-            OnCO2Changed(0, 0, 0);
+            OnCO2Changed(this._manager.CO2, this._manager.HUM, this._manager.TMP);
         }
         public override void CounterDestroy()
         {
