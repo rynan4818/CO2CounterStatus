@@ -5,7 +5,7 @@ using CO2Core.Util;
 using CO2Core.Configuration;
 using CO2Core.Interfaces;
 using System.IO;
-using System.Diagnostics;
+using IPA.Utilities.Async;
 
 namespace CO2Core.Models
 {
@@ -19,6 +19,7 @@ namespace CO2Core.Models
         private bool _disposedValue;
         private Thread _thread;
         public SerialPortController port = new SerialPortController();
+        private readonly CancellationTokenSource connectionClosed = new CancellationTokenSource();
         public void Initialize()
         {
             if (!PluginConfig.Instance.Enable)
@@ -60,10 +61,10 @@ namespace CO2Core.Models
                             if (hum > 99.9)
                                 hum = 99.9;
                             hum = Math.Round(hum, 1, MidpointRounding.AwayFromZero);
-                            HMMainThreadDispatcher.instance?.Enqueue(() =>
+                            UnityMainThreadTaskScheduler.Factory.StartNew(() =>
                             {
                                 UpdateCO2(co2, hum, tmp);
-                            });
+                            }, this.connectionClosed.Token);
                         }
                     }
                 }
@@ -124,10 +125,10 @@ namespace CO2Core.Models
                             double tmp;
                             if (int.TryParse(co2st, out co2) && double.TryParse(tmpst, out tmp) && double.TryParse(humst, out hum))
                             {
-                                HMMainThreadDispatcher.instance?.Enqueue(() =>
+                                UnityMainThreadTaskScheduler.Factory.StartNew(() =>
                                 {
                                     UpdateCO2(co2, hum, tmp);
-                                });
+                                }, this.connectionClosed.Token);
                             }
                             else
                                 Plugin.Log?.Error($"{maxTimeFile}:ParseError");
@@ -167,6 +168,7 @@ namespace CO2Core.Models
                 this._disposedValue = true;
                 if (disposing)
                 {
+                    this.connectionClosed.Cancel();
                     port.Send("STP");
                     port.PortClose();
 #if DEBUG
