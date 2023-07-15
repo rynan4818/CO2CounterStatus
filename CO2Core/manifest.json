@@ -3,7 +3,7 @@
   "id": "CO2Core",
   "name": "CO2Core",
   "author": "Rynan",
-  "version": "1.1.1",
+  "version": "1.1.3",
   "description": "CO2 concentration and temperature and humidity display using UD-CO2S",
   "gameVersion": "1.20.0",
   "dependsOn": {
