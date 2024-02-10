@@ -1,6 +1,6 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
   <settings-container>
-    <checkbox-setting text="Enable" value="Enable"  apply-on-change="true"></checkbox-setting>
-    <dropdown-list-setting text='UD-CO2S Port' choices='port-choices' value='port-set'></dropdown-list-setting>
+    <checkbox-setting text="Enable" value="Enable" apply-on-change="true"></checkbox-setting>
+    <dropdown-list-setting text='UD-CO2S Port' choices='port-choices' value='port-set' apply-on-change="true"></dropdown-list-setting>
   </settings-container>
 </bg>
