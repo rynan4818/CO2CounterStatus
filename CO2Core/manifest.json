@@ -3,12 +3,12 @@
   "id": "CO2Core",
   "name": "CO2Core",
   "author": "Rynan",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "CO2 concentration and temperature and humidity display using UD-CO2S",
-  "gameVersion": "1.20.0",
+  "gameVersion": "1.37.4",
   "dependsOn": {
-    "BSIPA": "^4.2.2",
-    "BeatSaberMarkupLanguage": "^1.6.3",
-    "SiraUtil": "^3.0.5"
+    "BSIPA": "^4.3.5",
+    "BeatSaberMarkupLanguage": "^1.12.0",
+    "SiraUtil": "^3.1.12"
   }
 }
